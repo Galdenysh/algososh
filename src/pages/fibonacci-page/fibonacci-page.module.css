@@ -9,7 +9,7 @@
 }
 
 .circleWrap {
-  margin-top: 120px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -17,6 +17,7 @@
 }
 
 .circle {
+  margin-top: 48px;
   margin-right: 16px;
 }
 .circle:last-of-type {

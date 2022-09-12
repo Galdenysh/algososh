@@ -4,6 +4,7 @@ import { Circle } from "../../components/ui/circle/circle";
 import { Input } from "../../components/ui/input/input";
 import { SolutionLayout } from "../../components/ui/solution-layout/solution-layout";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/funcs";
 import styles from "./string-page.module.css";
 
 export const StringComponent: React.FC = () => {
@@ -27,12 +28,6 @@ export const StringComponent: React.FC = () => {
     setValue(evt.target.value);
   };
 
-  function delay(ms: number) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-
   async function reverseStr(str: string) {
     const arr = str.split("");
     const sorted: Number[] = [];
@@ -41,8 +36,7 @@ export const StringComponent: React.FC = () => {
       setCurrentIdx([i, arr.length - 1 - i]);
       [arr[i], arr[arr.length - 1 - i]] = [arr[arr.length - 1 - i], arr[i]];
       await delay(1000);
-      sorted.push(i);
-      sorted.push(arr.length - 1 - i);
+      sorted.push(i, arr.length - 1 - i);
       setSortedIdx(sorted);
       setArr(arr);
     }
