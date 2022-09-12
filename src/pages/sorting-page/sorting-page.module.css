@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+}
+
+.inputWrap {
+  margin-right: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 210px;
+  margin-right: 12px;
+}
+.btn:last-of-type {
+  margin-right: 0;
+}
+
+.radioBtn {
+  margin-right: 50px;
+}
+
+.columnWrap {
+  margin-top: 48px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 342px;
+}
+
+.column {
+  margin-right: 10px;
+}
+.column:last-of-type {
+  margin-right: 0;
+}
