@@ -26,7 +26,7 @@ export const SortingPage: React.FC = () => {
     if (sort === "selection") {
       selectionSort(arr, monotonic);
     } else {
-      console.log("bubble", monotonic);
+      bubbleSort(arr, monotonic);
     }
   };
 
@@ -69,6 +69,35 @@ export const SortingPage: React.FC = () => {
     return arr;
   }
 
+  async function bubbleSort(arr: number[], monotonic: "ascending" | "descending") {
+    const sorted: Number[] = [];
+
+    for (let i = 0; i <= arr.length - 1; i++) {
+      for (let j = 0; j < arr.length - i - 1; j++) {
+        setCurrentIdx([j, j + 1]);
+        await delay(500);
+
+        if (monotonic === "ascending") {
+          if (arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            setArr(arr);
+          }
+        } else {
+          if (arr[j] < arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            setArr(arr);
+          }
+        }
+      }
+
+      sorted.push(arr.length - i - 1);
+      setSortedIdx(sorted);
+    }
+
+    setPending(false);
+    return arr;
+  }
+
   useEffect(() => {
     handleGetArr();
   }, []);
@@ -82,6 +111,7 @@ export const SortingPage: React.FC = () => {
             value={"selection"}
             label="Выбор"
             checked={sort === "selection"}
+            disabled={pending}
             onChange={() => setSort("selection")}
           />
           <RadioInput
@@ -89,6 +119,7 @@ export const SortingPage: React.FC = () => {
             value={"bubble"}
             label="Пузырёк"
             checked={sort === "bubble"}
+            disabled={pending}
             onChange={() => setSort("bubble")}
           />
           <Button
