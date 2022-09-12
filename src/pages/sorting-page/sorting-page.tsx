@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button/button";
 import { Column } from "../../components/ui/column/column";
 import { RadioInput } from "../../components/ui/radio-input/radio-input";
@@ -24,19 +24,19 @@ export const SortingPage: React.FC = () => {
     setPending(true);
 
     if (sort === "selection") {
-      if (monotonic === "ascending") selectionSortAscending(arr);
-      if (monotonic === "descending") console.log("descending");
+      selectionSort(arr, monotonic);
     } else {
-      if (monotonic === "ascending") console.log("bubble ascending");
-      if (monotonic === "descending") console.log("bubble descending");
+      console.log("bubble", monotonic);
     }
   };
 
   const handleGetArr = () => {
+    setCurrentIdx([]);
+    setSortedIdx([]);
     setArr(randomArr(3, 17, 0, 100));
   };
 
-  async function selectionSortAscending(arr: number[]) {
+  async function selectionSort(arr: number[], monotonic: "ascending" | "descending") {
     const sorted: Number[] = [];
 
     for (let i = 0; i < arr.length; i++) {
@@ -44,8 +44,15 @@ export const SortingPage: React.FC = () => {
       for (let j = i + 1; j < arr.length; j++) {
         setCurrentIdx([i, j]);
         await delay(500);
-        if (arr[indexMin] > arr[j]) {
-          indexMin = j;
+
+        if (monotonic === "ascending") {
+          if (arr[indexMin] > arr[j]) {
+            indexMin = j;
+          }
+        } else {
+          if (arr[indexMin] < arr[j]) {
+            indexMin = j;
+          }
         }
       }
 
@@ -61,6 +68,10 @@ export const SortingPage: React.FC = () => {
     setPending(false);
     return arr;
   }
+
+  useEffect(() => {
+    handleGetArr();
+  }, []);
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -86,7 +97,7 @@ export const SortingPage: React.FC = () => {
             text="По возрастанию"
             sorting={Direction.Ascending}
             disabled={pending}
-            isLoader={pending}
+            isLoader={pending && monotonic === "ascending"}
             onClick={() => setMonotonic("ascending")}
           />
           <Button
@@ -95,11 +106,11 @@ export const SortingPage: React.FC = () => {
             text="По убыванию"
             sorting={Direction.Descending}
             disabled={pending}
-            isLoader={pending}
+            isLoader={pending && monotonic === "descending"}
             onClick={() => setMonotonic("descending")}
           />
         </form>
-        <Button extraClass={styles.btn} type="button" text="Новый массив" onClick={handleGetArr} disabled={pending} isLoader={pending} />
+        <Button extraClass={styles.btn} type="button" text="Новый массив" onClick={handleGetArr} disabled={pending} />
       </div>
       <div className={styles.columnWrap}>
         {arr.map((item, index) => (
