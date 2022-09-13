@@ -9,7 +9,6 @@ import styles from "./fibonacci-page.module.css";
 export const FibonacciPage: React.FC = () => {
   const [value, setValue] = useState<number>(0);
   const [arrFib, setArrFib] = useState<number[]>([]);
-  const [, setStep] = useState(0);
   const [pending, setPending] = useState(false);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
@@ -46,12 +45,11 @@ export const FibonacciPage: React.FC = () => {
       default:
         setArrFib([0]);
         await delay(500);
-        setArrFib(arr);
+        setArrFib([...arr]);
         for (let i = 2; i <= num; i++) {
           await delay(500);
           arr.push(arr[i - 1] + arr[i - 2]);
-          setArrFib(arr);
-          setStep(i); // стейт, чтобы вызвать рендер
+          setArrFib([...arr]);
         }
         setPending(false);
         return arr;

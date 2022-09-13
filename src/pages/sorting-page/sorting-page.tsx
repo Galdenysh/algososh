@@ -61,7 +61,7 @@ export const SortingPage: React.FC = () => {
 
       if (indexMin !== i) {
         [arr[i], arr[indexMin]] = [arr[indexMin], arr[i]];
-        setArr(arr);
+        setArr([...arr]);
       }
     }
 
@@ -80,12 +80,12 @@ export const SortingPage: React.FC = () => {
         if (monotonic === "ascending") {
           if (arr[j] > arr[j + 1]) {
             [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            setArr(arr);
+            setArr([...arr]);
           }
         } else {
           if (arr[j] < arr[j + 1]) {
             [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            setArr(arr);
+            setArr([...arr]);
           }
         }
       }

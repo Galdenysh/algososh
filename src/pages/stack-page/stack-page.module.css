@@ -22,11 +22,7 @@
 }
 
 .circle {
-  margin-top: 78px;
-  margin-right: 16px;
-}
-.circle:last-of-type {
-  margin-right: 0;
+  margin: 78px 8px 0;
 }
 
 .btn {

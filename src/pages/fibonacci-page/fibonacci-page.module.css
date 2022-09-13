@@ -17,11 +17,7 @@
 }
 
 .circle {
-  margin-top: 48px;
-  margin-right: 16px;
-}
-.circle:last-of-type {
-  margin-right: 0;
+  margin: 48px 8px 0;
 }
 
 .btn {

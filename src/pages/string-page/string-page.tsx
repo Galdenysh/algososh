@@ -38,7 +38,7 @@ export const StringComponent: React.FC = () => {
       await delay(1000);
       sorted.push(i, arr.length - 1 - i);
       setSortedIdx(sorted);
-      setArr(arr);
+      setArr([...arr]);
     }
 
     setPending(false);
