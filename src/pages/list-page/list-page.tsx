@@ -39,6 +39,7 @@ export const ListPage: React.FC = () => {
       if (indexValue !== "") linkedList.addByIndex(indexValue, value);
       setArr([...linkedList.elements()]);
       setValue("");
+      setIndexValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
       if (indexValue !== "") linkedList.deleteByIndex(indexValue);
@@ -88,8 +89,14 @@ export const ListPage: React.FC = () => {
             value={indexValue}
             onChange={onChangeInputIndexValue}
           ></Input>
-          <Button extraClass={styles.btnBig} type="submit" value="addByIndex" text="Добавить по индексу" />
-          <Button extraClass={styles.btnBig} type="submit" value="removeByIndex" text="Удалить по индексу" />
+          <Button
+            extraClass={styles.btnBig}
+            type="submit"
+            value="addByIndex"
+            text="Добавить по индексу"
+            disabled={value === "" || indexValue === ""}
+          />
+          <Button extraClass={styles.btnBig} type="submit" value="removeByIndex" text="Удалить по индексу" disabled={arr.length === 0} />
         </div>
       </form>
       <div className={styles.circleWrap}>
