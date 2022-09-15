@@ -62,8 +62,8 @@ export const QueuePage: React.FC = () => {
       <div className={styles.container}>
         <form className={styles.inputWrap} onSubmit={handleSubmit}>
           <Input extraClass={styles.input} isLimitText={true} maxLength={4} value={value} onChange={onChangeInput} />
-          <Button extraClass={styles.btn} type="submit" value="add" text="Добавить" disabled={value === ""} />
-          <Button extraClass={styles.btn} type="submit" value="remove" text="Удалить" disabled={false} />
+          <Button extraClass={styles.btn} type="submit" value="add" text="Добавить" disabled={value === "" || enqueuePending} />
+          <Button extraClass={styles.btn} type="submit" value="remove" text="Удалить" disabled={dequeuePending} />
         </form>
         <Button extraClass={styles.btn} type="button" text="Отчистить" onClick={handleRemoveBtn} disabled={false} />
       </div>
