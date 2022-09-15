@@ -1,0 +1,34 @@
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputWrap {
+  margin-top: 40px;
+  display: flex;
+}
+.inputWrap:first-of-type {
+  margin-top: 0;
+}
+
+.input {
+  margin-right: 12px;
+  width: 204px;
+}
+
+.btnSmall {
+  margin-right: 12px;
+  width: 180px;
+}
+.btnSmall:last-of-type {
+  margin-right: 0;
+}
+
+.btnBig {
+  margin-right: 12px;
+  width: 372px;
+}
+.btnBig:last-of-type {
+  margin-right: 0;
+}
