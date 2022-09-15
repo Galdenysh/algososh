@@ -8,4 +8,4 @@ class LinkedListNode<T> {
   }
 }
 
-export default new LinkedListNode(0, 0);
+export default new LinkedListNode("", "");

@@ -7,7 +7,7 @@ import { delay } from "../../utils/funcs";
 import styles from "./fibonacci-page.module.css";
 
 export const FibonacciPage: React.FC = () => {
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number | "">("");
   const [arrFib, setArrFib] = useState<number[]>([]);
   const [pending, setPending] = useState(false);
 
@@ -16,7 +16,7 @@ export const FibonacciPage: React.FC = () => {
 
     setArrFib([]);
     setPending(true);
-    fibonacci(value);
+    if (value !== "") fibonacci(value);
   };
 
   const onChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,13 @@ export const FibonacciPage: React.FC = () => {
           onChange={onChangeInput}
           disabled={pending}
         />
-        <Button extraClass={styles.btn} type="submit" text="Рассчитать" disabled={pending || value < 0 || value > 19} isLoader={pending} />
+        <Button
+          extraClass={styles.btn}
+          type="submit"
+          text="Рассчитать"
+          disabled={pending || value < 0 || value > 19 || value === ""}
+          isLoader={pending}
+        />
       </form>
       <div className={styles.circleWrap}>
         {arrFib.map((item, index) => (
