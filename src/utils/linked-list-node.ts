@@ -1,11 +1,9 @@
-class LinkedListNode<T> {
+export class LinkedListNode<T> {
   item: T;
-  nextItem: T;
+  nextItem: LinkedListNode<T> | null;
 
-  constructor(item: T, nextItem: T) {
+  constructor(item: T, nextItem?: LinkedListNode<T> | null) {
     this.item = item;
-    this.nextItem = nextItem;
+    this.nextItem = nextItem ?? null;
   }
 }
-
-export default new LinkedListNode("", "");

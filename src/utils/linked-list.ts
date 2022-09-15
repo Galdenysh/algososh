@@ -1,15 +1,31 @@
+import { LinkedListNode } from "./linked-list-node";
+
 class LinkedList<T> {
   private store: T[];
+  private head: LinkedListNode<T> | null = null;
 
   constructor(list: T[]) {
     this.store = list;
   }
 
   prepend(item: T) {
-    this.store = [item, ...this.store];
+    const node = new LinkedListNode(item);
+    this.store = [node.item, ...this.store];
   }
   append(item: T) {
-    this.store = [...this.store, item];
+    const node = new LinkedListNode(item);
+
+    if (this.head === null) {
+      this.head = node;
+    } else {
+      let current = this.head;
+
+      while (current.nextItem) {
+        current = current.nextItem;
+      }
+
+      current.nextItem = node;
+    }
   }
   addByIndex(index: number, item: T) {
     this.store.splice(index, 0, item);
@@ -23,8 +39,19 @@ class LinkedList<T> {
   deleteTail() {
     this.store.splice(this.store.length - 1, 1);
   }
+  clear() {
+    this.head = null;
+  }
   elements() {
-    return this.store;
+    let curr = this.head;
+    let res: T[] = [];
+
+    while (curr) {
+      res.push(curr.item);
+      curr = curr.nextItem;
+    }
+
+    return res;
   }
 }
 

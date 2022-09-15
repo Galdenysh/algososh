@@ -52,7 +52,12 @@ export const ListPage: React.FC = () => {
   };
 
   useEffect(() => {
-    setArr(linkedList.elements());
+    linkedList.clear();
+    linkedList.append("0");
+    linkedList.append("34");
+    linkedList.append("8");
+    linkedList.append("1");
+    setArr([...linkedList.elements()]);
   }, []);
 
   return (
