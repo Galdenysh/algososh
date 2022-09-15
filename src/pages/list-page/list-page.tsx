@@ -20,10 +20,12 @@ export const ListPage: React.FC = () => {
     if (submitEvent.submitter?.getAttribute("value") === "addInHead") {
       linkedList.prepend(value);
       setArr([...linkedList.elements()]);
+      setValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "addInTail") {
       linkedList.append(value);
       setArr([...linkedList.elements()]);
+      setValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeHead") {
       linkedList.deleteHead();
@@ -36,6 +38,7 @@ export const ListPage: React.FC = () => {
     if (submitEvent.submitter?.getAttribute("value") === "addByIndex") {
       if (indexValue !== "") linkedList.addByIndex(indexValue, value);
       setArr([...linkedList.elements()]);
+      setValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
       if (indexValue !== "") linkedList.deleteByIndex(indexValue);
@@ -72,10 +75,10 @@ export const ListPage: React.FC = () => {
             value={value}
             onChange={onChangeInputValue}
           />
-          <Button extraClass={styles.btnSmall} type="submit" value="addInHead" text="Добавить в head" />
-          <Button extraClass={styles.btnSmall} type="submit" value="addInTail" text="Добавить в tail" />
-          <Button extraClass={styles.btnSmall} type="submit" value="removeHead" text="Удалить из head" />
-          <Button extraClass={styles.btnSmall} type="submit" value="removeTail" text="Удалить из tail" />
+          <Button extraClass={styles.btnSmall} type="submit" value="addInHead" text="Добавить в head" disabled={value === ""} />
+          <Button extraClass={styles.btnSmall} type="submit" value="addInTail" text="Добавить в tail" disabled={value === ""} />
+          <Button extraClass={styles.btnSmall} type="submit" value="removeHead" text="Удалить из head" disabled={arr.length === 0} />
+          <Button extraClass={styles.btnSmall} type="submit" value="removeTail" text="Удалить из tail" disabled={arr.length === 0} />
         </div>
         <div className={styles.inputWrap}>
           <Input
@@ -95,9 +98,9 @@ export const ListPage: React.FC = () => {
             <Circle
               extraClass={styles.circle}
               letter={String(item)}
-              head={"head"}
+              head={index === 0 ? "head" : ""}
               index={index}
-              tail={"tail"}
+              tail={index === arr.length - 1 ? "tail" : ""}
               state={ElementStates.Default}
             />
             {index < arr.length - 1 && <ArrowIcon />}

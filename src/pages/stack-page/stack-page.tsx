@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button/button";
 import { Circle } from "../../components/ui/circle/circle";
 import { Input } from "../../components/ui/input/input";
@@ -41,6 +41,10 @@ export const StackPage: React.FC = () => {
     stack.clear();
     setArr([...stack.elements()]);
   };
+
+  useEffect(() => {
+    setArr([...stack.elements()]);
+  }, []);
 
   return (
     <SolutionLayout title="Стек">

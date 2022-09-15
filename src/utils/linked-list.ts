@@ -1,12 +1,8 @@
 import { LinkedListNode } from "./linked-list-node";
 
 class LinkedList<T> {
-  // private store: T[];
   private head: LinkedListNode<T> | null = null;
-
-  // constructor(list: T[]) {
-  //   this.store = list;
-  // }
+  private size: number = 0;
 
   prepend(item: T) {
     const node = new LinkedListNode(item);
@@ -17,7 +13,10 @@ class LinkedList<T> {
       node.nextItem = this.head;
       this.head = node;
     }
+
+    this.size++;
   }
+
   append(item: T) {
     const node = new LinkedListNode(item);
 
@@ -32,22 +31,45 @@ class LinkedList<T> {
 
       current.nextItem = node;
     }
+
+    this.size++;
   }
-  addByIndex(index: number, item: T) {
-    // this.store.splice(index, 0, item);
-  }
-  deleteByIndex(index: number) {
-    // this.store.splice(index, 1);
-  }
+
   deleteHead() {
-    // this.store.splice(0, 1);
+    if (this.head) {
+      this.head = this.head.nextItem;
+      this.size--;
+    }
   }
+
   deleteTail() {
-    // this.store.splice(this.store.length - 1, 1);
+    if (this.size === 1) this.clear();
+
+    if (this.head) {
+      let current = this.head;
+
+      for (let i = 1; i < this.size - 1; i++) {
+        if (current.nextItem) current = current.nextItem;
+      }
+
+      current.nextItem = null;
+      this.size--;
+    }
   }
+
+  addByIndex(index: number, item: T) {
+    //
+  }
+
+  deleteByIndex(index: number) {
+    //
+  }
+
   clear() {
     this.head = null;
+    this.size = 0;
   }
+
   elements() {
     let curr = this.head;
     let res: T[] = [];
