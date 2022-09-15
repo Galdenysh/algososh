@@ -5,7 +5,7 @@
 }
 
 .inputWrap {
-  margin-top: 40px;
+  margin-top: 12px;
   display: flex;
 }
 .inputWrap:first-of-type {
@@ -31,4 +31,21 @@
 }
 .btnBig:last-of-type {
   margin-right: 0;
+}
+
+.circleWrap {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.circle {
+  margin: 0 25px 0 25px;
+}
+
+.circleItem {
+  display: flex;
+  align-items: center;
 }

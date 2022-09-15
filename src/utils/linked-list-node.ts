@@ -1,5 +1,11 @@
 class LinkedListNode<T> {
-  constructor() {}
+  item: T;
+  nextItem: T;
+
+  constructor(item: T, nextItem: T) {
+    this.item = item;
+    this.nextItem = nextItem;
+  }
 }
 
-export default new LinkedListNode();
+export default new LinkedListNode(0, 0);
