@@ -19,3 +19,11 @@ export function randomArr(minLength: number, maxLength: number, minValue: number
 
   return arr;
 }
+
+export function getNextTail(tail: number | null) {
+  let nextTail = tail;
+
+  if (nextTail === null) return (nextTail = 0);
+
+  return nextTail + 1;
+}

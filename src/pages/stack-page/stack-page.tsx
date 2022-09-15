@@ -21,12 +21,12 @@ export const StackPage: React.FC = () => {
 
     if (submitEvent.submitter?.getAttribute("value") === "add") {
       stack.push(value);
-      setArr(stack.elements());
+      setArr([...stack.elements()]);
       setValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "remove") {
       stack.pop();
-      setArr(stack.elements());
+      setArr([...stack.elements()]);
     }
 
     await delay(500);
@@ -39,7 +39,7 @@ export const StackPage: React.FC = () => {
 
   const handleRemoveBtn = () => {
     stack.clear();
-    setArr(stack.elements());
+    setArr([...stack.elements()]);
   };
 
   return (
@@ -59,7 +59,7 @@ export const StackPage: React.FC = () => {
             key={index}
             letter={String(item)}
             head={index === stack.size() - 1 ? "top" : ""}
-            tail={String(index)}
+            index={index}
             state={index === stack.size() - 1 && pending ? ElementStates.Changing : ElementStates.Default}
           />
         ))}
