@@ -5,6 +5,7 @@ import { ArrowIcon } from "../../components/ui/icons/arrow-icon";
 import { Input } from "../../components/ui/input/input";
 import { SolutionLayout } from "../../components/ui/solution-layout/solution-layout";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/funcs";
 import linkedList from "../../utils/linked-list";
 import styles from "./list-page.module.css";
 
@@ -12,38 +13,66 @@ export const ListPage: React.FC = () => {
   const [value, setValue] = useState("");
   const [indexValue, setIndexValue] = useState<number | "">("");
   const [arr, setArr] = useState<unknown[]>([]);
+  const [pendingAll, setPendingAll] = useState(false);
+  const [pendingAddInHead, setPendingAddInHead] = useState(false);
+  const [pendingAddInTail, setPendingAddInTail] = useState(false);
+  const [pendingDelInHead, setPendingDelInHead] = useState(false);
+  const [pendingDelInTail, setPendingDelInTail] = useState(false);
+  // const [pending, setPending] = useState(false);
+  // const [pending, setPending] = useState(false);
+  const [newIndex, setNewIndex] = useState<number | null>(null);
+  const [modified, setModified] = useState(false);
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const submitEvent = evt.nativeEvent as SubmitEvent;
 
     if (submitEvent.submitter?.getAttribute("value") === "addInHead") {
-      linkedList.prepend(value);
-      setArr([...linkedList.elements()]);
+      setPendingAll(true);
+      setPendingAddInHead(true);
+      setNewIndex(0);
+      await linkedList.prepend(value);
+      setArr([...linkedList.toArray()]);
       setValue("");
+      setPendingAll(false);
+      setPendingAddInHead(false);
+
+      setModified(true);
+      await delay(500);
+      setModified(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addInTail") {
-      linkedList.append(value);
-      setArr([...linkedList.elements()]);
+      setPendingAll(true);
+      setPendingAddInTail(true);
+      setNewIndex(arr.length - 1);
+      await linkedList.append(value);
+      setArr([...linkedList.toArray()]);
       setValue("");
+      setPendingAll(false);
+      setPendingAddInTail(false);
+
+      setNewIndex(arr.length);
+      setModified(true);
+      await delay(500);
+      setModified(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeHead") {
       linkedList.deleteHead();
-      setArr([...linkedList.elements()]);
+      setArr([...linkedList.toArray()]);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeTail") {
       linkedList.deleteTail();
-      setArr([...linkedList.elements()]);
+      setArr([...linkedList.toArray()]);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addByIndex") {
       if (indexValue !== "") linkedList.addByIndex(indexValue, value);
-      setArr([...linkedList.elements()]);
+      setArr([...linkedList.toArray()]);
       setValue("");
       setIndexValue("");
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
       if (indexValue !== "") linkedList.deleteByIndex(indexValue);
-      setArr([...linkedList.elements()]);
+      setArr([...linkedList.toArray()]);
     }
   };
 
@@ -56,12 +85,7 @@ export const ListPage: React.FC = () => {
   };
 
   useEffect(() => {
-    linkedList.clear();
-    linkedList.append("0");
-    linkedList.append("34");
-    linkedList.append("8");
-    linkedList.append("1");
-    setArr([...linkedList.elements()]);
+    setArr([...linkedList.toArray()]);
   }, []);
 
   return (
@@ -75,11 +99,40 @@ export const ListPage: React.FC = () => {
             maxLength={4}
             value={value}
             onChange={onChangeInputValue}
+            disabled={pendingAll}
           />
-          <Button extraClass={styles.btnSmall} type="submit" value="addInHead" text="Добавить в head" disabled={value === ""} />
-          <Button extraClass={styles.btnSmall} type="submit" value="addInTail" text="Добавить в tail" disabled={value === ""} />
-          <Button extraClass={styles.btnSmall} type="submit" value="removeHead" text="Удалить из head" disabled={arr.length === 0} />
-          <Button extraClass={styles.btnSmall} type="submit" value="removeTail" text="Удалить из tail" disabled={arr.length === 0} />
+          <Button
+            extraClass={styles.btnSmall}
+            type="submit"
+            value="addInHead"
+            text="Добавить в head"
+            disabled={value === "" || pendingAll}
+            isLoader={pendingAddInHead}
+          />
+          <Button
+            extraClass={styles.btnSmall}
+            type="submit"
+            value="addInTail"
+            text="Добавить в tail"
+            disabled={value === "" || pendingAll}
+            isLoader={pendingAddInTail}
+          />
+          <Button
+            extraClass={styles.btnSmall}
+            type="submit"
+            value="removeHead"
+            text="Удалить из head"
+            disabled={arr.length === 0 || pendingAll}
+            isLoader={pendingDelInHead}
+          />
+          <Button
+            extraClass={styles.btnSmall}
+            type="submit"
+            value="removeTail"
+            text="Удалить из tail"
+            disabled={arr.length === 0 || pendingAll}
+            isLoader={pendingDelInTail}
+          />
         </div>
         <div className={styles.inputWrap}>
           <Input
@@ -88,15 +141,22 @@ export const ListPage: React.FC = () => {
             type="number"
             value={indexValue}
             onChange={onChangeInputIndexValue}
+            disabled={pendingAll}
           ></Input>
           <Button
             extraClass={styles.btnBig}
             type="submit"
             value="addByIndex"
             text="Добавить по индексу"
-            disabled={value === "" || indexValue === ""}
+            disabled={value === "" || indexValue === "" || pendingAll}
           />
-          <Button extraClass={styles.btnBig} type="submit" value="removeByIndex" text="Удалить по индексу" disabled={arr.length === 0} />
+          <Button
+            extraClass={styles.btnBig}
+            type="submit"
+            value="removeByIndex"
+            text="Удалить по индексу"
+            disabled={arr.length === 0 || pendingAll}
+          />
         </div>
       </form>
       <div className={styles.circleWrap}>
@@ -105,10 +165,18 @@ export const ListPage: React.FC = () => {
             <Circle
               extraClass={styles.circle}
               letter={String(item)}
-              head={index === 0 ? "head" : ""}
+              head={
+                pendingAll && index === newIndex ? (
+                  <Circle letter={value} isSmall={true} state={ElementStates.Changing} />
+                ) : index === 0 ? (
+                  "head"
+                ) : (
+                  ""
+                )
+              }
               index={index}
               tail={index === arr.length - 1 ? "tail" : ""}
-              state={ElementStates.Default}
+              state={modified && index === newIndex ? ElementStates.Modified : ElementStates.Default}
             />
             {index < arr.length - 1 && <ArrowIcon />}
           </div>

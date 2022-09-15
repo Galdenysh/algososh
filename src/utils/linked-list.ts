@@ -1,23 +1,22 @@
+import { delay } from "./funcs";
 import { LinkedListNode } from "./linked-list-node";
 
 class LinkedList<T> {
   private head: LinkedListNode<T> | null = null;
   private size: number = 0;
+  private initArr: T[] | undefined;
 
-  prepend(item: T) {
-    const node = new LinkedListNode(item);
+  constructor(initArr?: T[]) {
+    this.initArr = initArr;
 
-    if (this.head === null) {
-      this.head = node;
-    } else {
-      node.nextItem = this.head;
-      this.head = node;
-    }
-
-    this.size++;
+    if (this.initArr) this._getStartItems(this.initArr);
   }
 
-  append(item: T) {
+  private _getStartItems(arr: T[]) {
+    arr.forEach((item) => this._fastAppend(item));
+  }
+
+  private _fastAppend(item: T) {
     const node = new LinkedListNode(item);
 
     if (this.head === null) {
@@ -33,6 +32,41 @@ class LinkedList<T> {
     }
 
     this.size++;
+  }
+
+  async prepend(item: T) {
+    await delay(500);
+    const node = new LinkedListNode(item);
+
+    if (this.head === null) {
+      this.head = node;
+    } else {
+      node.nextItem = this.head;
+      this.head = node;
+    }
+
+    this.size++;
+    return Promise.resolve("Item added");
+  }
+
+  async append(item: T) {
+    await delay(500);
+    const node = new LinkedListNode(item);
+
+    if (this.head === null) {
+      this.head = node;
+    } else {
+      let current = this.head;
+
+      while (current.nextItem) {
+        current = current.nextItem;
+      }
+
+      current.nextItem = node;
+    }
+
+    this.size++;
+    return Promise.resolve("Item added");
   }
 
   deleteHead() {
@@ -114,7 +148,7 @@ class LinkedList<T> {
     this.size = 0;
   }
 
-  elements() {
+  toArray() {
     let curr = this.head;
     let res: T[] = [];
 
@@ -127,4 +161,4 @@ class LinkedList<T> {
   }
 }
 
-export default new LinkedList();
+export default new LinkedList(["0", "34", "8", "1"]);
