@@ -22,7 +22,7 @@ export const ListPage: React.FC = () => {
   const [pendingDelByIndex, setPendingDelByIndex] = useState(false);
   const [modified, setModified] = useState(false);
   const [newIndex, setNewIndex] = useState<number | null>(null);
-  const [includesIdx, setIncludesIdx] = useState<number[]>([]);
+  const [currentIdx, setCurrentIdx] = useState<number[]>([]);
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -31,33 +31,34 @@ export const ListPage: React.FC = () => {
     if (submitEvent.submitter?.getAttribute("value") === "addInHead") {
       setPendingAll(true);
       setPendingAddInHead(true);
-      setNewIndex(0);
       await linkedList.prepend(value);
       setArr([...linkedList.toArray()]);
       setValue("");
-      setNewIndex(null);
       setPendingAll(false);
       setPendingAddInHead(false);
 
+      // Подсветка зеленым
+      setNewIndex(0);
       setModified(true);
       await delay(500);
       setModified(false);
+      setNewIndex(null);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addInTail") {
       setPendingAll(true);
       setPendingAddInTail(true);
-      setNewIndex(arr.length - 1);
       await linkedList.append(value);
       setArr([...linkedList.toArray()]);
       setValue("");
-      setNewIndex(null);
       setPendingAll(false);
       setPendingAddInTail(false);
 
+      // Подсветка зеленым
       setNewIndex(arr.length);
       setModified(true);
       await delay(500);
       setModified(false);
+      setNewIndex(null);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeHead") {
       setPendingAll(true);
@@ -81,7 +82,7 @@ export const ListPage: React.FC = () => {
 
       for (let i = 0; i <= indexValue; i++) {
         setNewIndex(i);
-        setIncludesIdx([...includesIdx, i]);
+        setCurrentIdx([...currentIdx, i]);
         await delay(500);
       }
 
@@ -90,30 +91,34 @@ export const ListPage: React.FC = () => {
       setPendingAll(false);
       setPendingAddByIndex(false);
 
-      if (indexValue !== "") setNewIndex(indexValue);
+      // Подсветка зеленым
       setModified(true);
       await delay(500);
       setModified(false);
+      setNewIndex(null);
 
       setValue("");
       setIndexValue("");
-      setIncludesIdx([]);
-      setNewIndex(null);
+      setCurrentIdx([]);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
       setPendingAll(true);
       setPendingDelByIndex(true);
 
       for (let i = 0; i <= indexValue; i++) {
-        setIncludesIdx([...includesIdx, i]);
+        setCurrentIdx([...currentIdx, i]);
         await delay(500);
+        if (i === indexValue) setNewIndex(i);
       }
 
+      await delay(500);
       if (indexValue !== "") linkedList.deleteByIndex(indexValue);
       setArr([...linkedList.toArray()]);
-      setIncludesIdx([]);
       setPendingAll(false);
       setPendingDelByIndex(false);
+
+      setNewIndex(null);
+      setCurrentIdx([]);
     }
   };
 
@@ -207,9 +212,17 @@ export const ListPage: React.FC = () => {
           <div className={styles.circleItem} key={index}>
             <Circle
               extraClass={styles.circle}
-              letter={(pendingDelInHead && index === 0) || (pendingDelInTail && index === arr.length - 1) ? "" : String(item)}
+              letter={
+                (pendingDelInHead && index === 0) ||
+                (pendingDelInTail && index === arr.length - 1) ||
+                (pendingDelByIndex && index === newIndex)
+                  ? ""
+                  : String(item)
+              }
               head={
-                pendingAll && index === newIndex ? (
+                (pendingAddInHead && index === 0) ||
+                (pendingAddInTail && index === arr.length - 1) ||
+                (pendingAddByIndex && index === newIndex) ? (
                   <Circle letter={value} isSmall={true} state={ElementStates.Changing} />
                 ) : index === 0 ? (
                   "head"
@@ -219,9 +232,19 @@ export const ListPage: React.FC = () => {
               }
               index={index}
               tail={
-                (pendingDelInHead && index === 0) || (pendingDelInTail && index === arr.length - 1) ? (
+                (pendingDelInHead && index === 0) ||
+                (pendingDelInTail && index === arr.length - 1) ||
+                (pendingDelByIndex && index === newIndex) ? (
                   <Circle
-                    letter={pendingDelInHead ? String(arr[0]) : pendingDelInTail ? String(arr[arr.length - 1]) : ""}
+                    letter={
+                      pendingDelInHead
+                        ? String(arr[0])
+                        : pendingDelInTail
+                        ? String(arr[arr.length - 1])
+                        : pendingDelByIndex
+                        ? String(arr[indexValue as number])
+                        : ""
+                    }
                     isSmall={true}
                     state={ElementStates.Changing}
                   />
@@ -234,7 +257,7 @@ export const ListPage: React.FC = () => {
               state={
                 modified && index === newIndex
                   ? ElementStates.Modified
-                  : (includesIdx.includes(index + 1) && pendingAddByIndex) || (includesIdx.includes(index) && pendingDelByIndex)
+                  : (currentIdx.includes(index + 1) && pendingAddByIndex) || (currentIdx.includes(index) && pendingDelByIndex)
                   ? ElementStates.Changing
                   : ElementStates.Default
               }
