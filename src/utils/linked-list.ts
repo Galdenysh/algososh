@@ -69,17 +69,28 @@ class LinkedList<T> {
     return Promise.resolve("Item added");
   }
 
-  deleteHead() {
+  async deleteHead() {
     if (this.head) {
+      await delay(500);
       this.head = this.head.nextItem;
       this.size--;
+
+      return Promise.resolve("Item removed");
     }
+
+    return Promise.reject("Item not removed");
   }
 
-  deleteTail() {
-    if (this.size === 1) this.clear();
+  async deleteTail() {
+    if (this.size === 1) {
+      await delay(500);
+      this.clear();
+
+      return Promise.resolve("Item removed");
+    }
 
     if (this.head) {
+      await delay(500);
       let current = this.head;
 
       for (let i = 1; i < this.size - 1; i++) {
@@ -88,7 +99,11 @@ class LinkedList<T> {
 
       current.nextItem = null;
       this.size--;
+
+      return Promise.resolve("Item removed");
     }
+
+    return Promise.reject("Item not removed");
   }
 
   addByIndex(index: number, item: T) {

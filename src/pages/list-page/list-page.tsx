@@ -57,12 +57,22 @@ export const ListPage: React.FC = () => {
       setModified(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeHead") {
-      linkedList.deleteHead();
+      setPendingAll(true);
+      setPendingDelInHead(true);
+      setNewIndex(null);
+      await linkedList.deleteHead();
       setArr([...linkedList.toArray()]);
+      setPendingAll(false);
+      setPendingDelInHead(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeTail") {
-      linkedList.deleteTail();
+      setPendingAll(true);
+      setPendingDelInTail(true);
+      setNewIndex(null);
+      await linkedList.deleteTail();
       setArr([...linkedList.toArray()]);
+      setPendingAll(false);
+      setPendingDelInTail(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addByIndex") {
       if (indexValue !== "") linkedList.addByIndex(indexValue, value);
@@ -164,7 +174,7 @@ export const ListPage: React.FC = () => {
           <div className={styles.circleItem} key={index}>
             <Circle
               extraClass={styles.circle}
-              letter={String(item)}
+              letter={(pendingDelInHead && index === 0) || (pendingDelInTail && index === arr.length - 1) ? "" : String(item)}
               head={
                 pendingAll && index === newIndex ? (
                   <Circle letter={value} isSmall={true} state={ElementStates.Changing} />
@@ -175,7 +185,19 @@ export const ListPage: React.FC = () => {
                 )
               }
               index={index}
-              tail={index === arr.length - 1 ? "tail" : ""}
+              tail={
+                (pendingDelInHead && index === 0) || (pendingDelInTail && index === arr.length - 1) ? (
+                  <Circle
+                    letter={pendingDelInHead ? String(arr[0]) : pendingDelInTail ? String(arr[arr.length - 1]) : ""}
+                    isSmall={true}
+                    state={ElementStates.Changing}
+                  />
+                ) : index === arr.length - 1 ? (
+                  "tail"
+                ) : (
+                  ""
+                )
+              }
               state={modified && index === newIndex ? ElementStates.Modified : ElementStates.Default}
             />
             {index < arr.length - 1 && <ArrowIcon />}
