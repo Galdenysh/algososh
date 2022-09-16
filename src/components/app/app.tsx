@@ -7,13 +7,12 @@ import { QueuePage } from "../../pages/queue-page/queue-page";
 import { StringComponent } from "../../pages/string-page/string-page";
 import { SortingPage } from "../../pages/sorting-page/sorting-page";
 import { StackPage } from "../../pages/stack-page/stack-page";
-
-import "./app.css";
+import styles from "./app.module.css";
 
 function App() {
   return (
-    <div className="app">
-      <BrowserRouter>
+    <div className={styles.app}>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
           <Route path="/" exact>
             <MainPage />

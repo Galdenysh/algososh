@@ -1,0 +1,25 @@
+.inputWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.input {
+  margin-right: 12px;
+  width: 380px;
+}
+
+.circleWrap {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1100px;
+}
+
+.circle {
+  margin: 48px 8px 0;
+}
+
+.btn {
+  width: 140px;
+}

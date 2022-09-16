@@ -1,0 +1,51 @@
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputWrap {
+  margin-top: 12px;
+  display: flex;
+}
+.inputWrap:first-of-type {
+  margin-top: 0;
+}
+
+.input {
+  margin-right: 12px;
+  width: 204px;
+}
+
+.btnSmall {
+  margin-right: 12px;
+  width: 180px;
+}
+.btnSmall:last-of-type {
+  margin-right: 0;
+}
+
+.btnBig {
+  margin-right: 12px;
+  width: 372px;
+}
+.btnBig:last-of-type {
+  margin-right: 0;
+}
+
+.circleWrap {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.circle {
+  margin: 0 25px 0 25px;
+}
+
+.circleItem {
+  display: flex;
+  align-items: center;
+}

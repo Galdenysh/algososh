@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.inputWrap {
+  display: flex;
+  justify-content: center;
+  margin-right: 80px;
+}
+
+.input {
+  margin-right: 12px;
+  width: 380px;
+}
+
+.circleWrap {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.circle {
+  margin: 78px 8px 0;
+}
+
+.btn {
+  margin-right: 12px;
+}
+.btn:last-of-type {
+  margin-right: 0;
+}
