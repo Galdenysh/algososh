@@ -21,6 +21,7 @@ export const ListPage: React.FC = () => {
   const [pendingAddByIndex, setPendingAddByIndex] = useState(false);
   const [pendingDelByIndex, setPendingDelByIndex] = useState(false);
   const [modified, setModified] = useState(false);
+  const [invalidIndex, setInvalidIndex] = useState(false);
   const [newIndex, setNewIndex] = useState<number | null>(null);
   const [currentIdx, setCurrentIdx] = useState<number[]>([]);
 
@@ -77,6 +78,8 @@ export const ListPage: React.FC = () => {
       setPendingDelInTail(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addByIndex") {
+      if (indexValue < 0 || indexValue >= linkedList.getSize()) return;
+
       setPendingAll(true);
       setPendingAddByIndex(true);
 
@@ -102,6 +105,8 @@ export const ListPage: React.FC = () => {
       setCurrentIdx([]);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
+      if (indexValue < 0 || indexValue >= linkedList.getSize()) return;
+
       setPendingAll(true);
       setPendingDelByIndex(true);
 
@@ -118,6 +123,7 @@ export const ListPage: React.FC = () => {
       setPendingDelByIndex(false);
 
       setNewIndex(null);
+      setIndexValue("");
       setCurrentIdx([]);
     }
   };
@@ -133,6 +139,10 @@ export const ListPage: React.FC = () => {
   useEffect(() => {
     setArr([...linkedList.toArray()]);
   }, []);
+
+  useEffect(() => {
+    indexValue < 0 || indexValue >= linkedList.getSize() ? setInvalidIndex(true) : setInvalidIndex(false);
+  }, [indexValue]);
 
   return (
     <SolutionLayout title="Связный список">
@@ -194,7 +204,7 @@ export const ListPage: React.FC = () => {
             type="submit"
             value="addByIndex"
             text="Добавить по индексу"
-            disabled={value === "" || indexValue === "" || pendingAll}
+            disabled={value === "" || indexValue === "" || pendingAll || invalidIndex}
             isLoader={pendingAddByIndex}
           />
           <Button
@@ -202,7 +212,7 @@ export const ListPage: React.FC = () => {
             type="submit"
             value="removeByIndex"
             text="Удалить по индексу"
-            disabled={arr.length === 0 || pendingAll}
+            disabled={arr.length === 0 || indexValue === "" || pendingAll || invalidIndex}
             isLoader={pendingDelByIndex}
           />
         </div>

@@ -174,6 +174,10 @@ class LinkedList<T> {
 
     return res;
   }
+
+  getSize() {
+    return this.size;
+  }
 }
 
 export default new LinkedList(["0", "34", "8", "1"]);
