@@ -18,10 +18,11 @@ export const ListPage: React.FC = () => {
   const [pendingAddInTail, setPendingAddInTail] = useState(false);
   const [pendingDelInHead, setPendingDelInHead] = useState(false);
   const [pendingDelInTail, setPendingDelInTail] = useState(false);
-  // const [pending, setPending] = useState(false);
-  // const [pending, setPending] = useState(false);
-  const [newIndex, setNewIndex] = useState<number | null>(null);
+  const [pendingAddByIndex, setPendingAddByIndex] = useState(false);
+  const [pendingDelByIndex, setPendingDelByIndex] = useState(false);
   const [modified, setModified] = useState(false);
+  const [newIndex, setNewIndex] = useState<number | null>(null);
+  const [includesIdx, setIncludesIdx] = useState<number[]>([]);
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -34,6 +35,7 @@ export const ListPage: React.FC = () => {
       await linkedList.prepend(value);
       setArr([...linkedList.toArray()]);
       setValue("");
+      setNewIndex(null);
       setPendingAll(false);
       setPendingAddInHead(false);
 
@@ -48,6 +50,7 @@ export const ListPage: React.FC = () => {
       await linkedList.append(value);
       setArr([...linkedList.toArray()]);
       setValue("");
+      setNewIndex(null);
       setPendingAll(false);
       setPendingAddInTail(false);
 
@@ -59,7 +62,6 @@ export const ListPage: React.FC = () => {
     if (submitEvent.submitter?.getAttribute("value") === "removeHead") {
       setPendingAll(true);
       setPendingDelInHead(true);
-      setNewIndex(null);
       await linkedList.deleteHead();
       setArr([...linkedList.toArray()]);
       setPendingAll(false);
@@ -68,21 +70,50 @@ export const ListPage: React.FC = () => {
     if (submitEvent.submitter?.getAttribute("value") === "removeTail") {
       setPendingAll(true);
       setPendingDelInTail(true);
-      setNewIndex(null);
       await linkedList.deleteTail();
       setArr([...linkedList.toArray()]);
       setPendingAll(false);
       setPendingDelInTail(false);
     }
     if (submitEvent.submitter?.getAttribute("value") === "addByIndex") {
+      setPendingAll(true);
+      setPendingAddByIndex(true);
+
+      for (let i = 0; i <= indexValue; i++) {
+        setNewIndex(i);
+        setIncludesIdx([...includesIdx, i]);
+        await delay(500);
+      }
+
       if (indexValue !== "") linkedList.addByIndex(indexValue, value);
       setArr([...linkedList.toArray()]);
+      setPendingAll(false);
+      setPendingAddByIndex(false);
+
+      if (indexValue !== "") setNewIndex(indexValue);
+      setModified(true);
+      await delay(500);
+      setModified(false);
+
       setValue("");
       setIndexValue("");
+      setIncludesIdx([]);
+      setNewIndex(null);
     }
     if (submitEvent.submitter?.getAttribute("value") === "removeByIndex") {
+      setPendingAll(true);
+      setPendingDelByIndex(true);
+
+      for (let i = 0; i <= indexValue; i++) {
+        setIncludesIdx([...includesIdx, i]);
+        await delay(500);
+      }
+
       if (indexValue !== "") linkedList.deleteByIndex(indexValue);
       setArr([...linkedList.toArray()]);
+      setIncludesIdx([]);
+      setPendingAll(false);
+      setPendingDelByIndex(false);
     }
   };
 
@@ -159,6 +190,7 @@ export const ListPage: React.FC = () => {
             value="addByIndex"
             text="Добавить по индексу"
             disabled={value === "" || indexValue === "" || pendingAll}
+            isLoader={pendingAddByIndex}
           />
           <Button
             extraClass={styles.btnBig}
@@ -166,6 +198,7 @@ export const ListPage: React.FC = () => {
             value="removeByIndex"
             text="Удалить по индексу"
             disabled={arr.length === 0 || pendingAll}
+            isLoader={pendingDelByIndex}
           />
         </div>
       </form>
@@ -198,7 +231,13 @@ export const ListPage: React.FC = () => {
                   ""
                 )
               }
-              state={modified && index === newIndex ? ElementStates.Modified : ElementStates.Default}
+              state={
+                modified && index === newIndex
+                  ? ElementStates.Modified
+                  : (includesIdx.includes(index + 1) && pendingAddByIndex) || (includesIdx.includes(index) && pendingDelByIndex)
+                  ? ElementStates.Changing
+                  : ElementStates.Default
+              }
             />
             {index < arr.length - 1 && <ArrowIcon />}
           </div>
