@@ -70,9 +70,21 @@ export const QueuePage: React.FC = () => {
             onChange={onChangeInput}
           />
           <Button extraClass={styles.btn} type="submit" value="add" text="Добавить" disabled={value === "" || enqueuePending} />
-          <Button extraClass={styles.btn} type="submit" value="remove" text="Удалить" disabled={dequeuePending} />
+          <Button
+            extraClass={styles.btn}
+            type="submit"
+            value="remove"
+            text="Удалить"
+            disabled={enqueuePending || dequeuePending || queue.head() === null || queue.tail() === null}
+          />
         </form>
-        <Button extraClass={styles.btn} type="button" text="Отчистить" onClick={handleRemoveBtn} disabled={false} />
+        <Button
+          extraClass={styles.btn}
+          type="button"
+          text="Отчистить"
+          onClick={handleRemoveBtn}
+          disabled={enqueuePending || dequeuePending || (queue.head() === null && queue.tail() === null)}
+        />
       </div>
       <div className={styles.circleWrap}>
         {arr.map((item, index) => (

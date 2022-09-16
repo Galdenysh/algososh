@@ -49,7 +49,7 @@ export const StringComponent: React.FC = () => {
     <SolutionLayout title="Строка">
       <form className={styles.inputWrap} onSubmit={handleSubmit}>
         <Input extraClass={styles.input} isLimitText={true} maxLength={11} value={value} onChange={onChangeInput} disabled={pending} />
-        <Button extraClass={styles.btn} type="submit" text="Развернуть" disabled={pending} isLoader={pending} />
+        <Button extraClass={styles.btn} type="submit" text="Развернуть" disabled={pending || value === ""} isLoader={pending} />
       </form>
       <div className={styles.circleWrap}>
         {arr.map((item, index) => (
