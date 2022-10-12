@@ -27,7 +27,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "jest",
-    "test:cypress": "cypress run"
+    "test:cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": [
