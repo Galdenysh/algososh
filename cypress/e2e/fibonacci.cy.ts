@@ -1,3 +1,6 @@
+/// <reference types="cypress" />
+// @ts-check
+
 describe("fibonacci page", () => {
   before(() => {
     cy.visit("/algososh/fibonacci");

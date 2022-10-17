@@ -1,3 +1,6 @@
+/// <reference types="cypress" />
+// @ts-check
+
 describe("stack page", () => {
   before(() => {
     cy.visit("/algososh/queue");

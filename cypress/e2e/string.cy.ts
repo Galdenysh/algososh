@@ -1,3 +1,6 @@
+/// <reference types="cypress" />
+// @ts-check
+
 describe("string page", () => {
   before(() => {
     cy.visit("/algososh/recursion");

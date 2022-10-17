@@ -1,3 +1,7 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
+/// <reference types="cypress" />
+// @ts-check
+
 describe("list page", () => {
   before(() => {
     cy.visit("/algososh/list");
