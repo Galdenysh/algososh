@@ -6,6 +6,8 @@ import { SolutionLayout } from "../../components/ui/solution-layout/solution-lay
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import { delay, randomArr } from "../../utils/funcs";
+import bubbleSort from "./bubbleSort";
+import selectionSort from "./selectionSort";
 import styles from "./sorting-page.module.css";
 
 export const SortingPage: React.FC = () => {
@@ -24,9 +26,9 @@ export const SortingPage: React.FC = () => {
     setPending(true);
 
     if (sort === "selection") {
-      selectionSort(arr, monotonic);
+      selectionSort(arr, monotonic, setCurrentIdx, setSortedIdx, setArr, setPending, delay);
     } else {
-      bubbleSort(arr, monotonic);
+      bubbleSort(arr, monotonic, setCurrentIdx, setSortedIdx, setArr, setPending, delay);
     }
   };
 
@@ -35,68 +37,6 @@ export const SortingPage: React.FC = () => {
     setSortedIdx([]);
     setArr(randomArr(3, 17, 0, 100));
   };
-
-  async function selectionSort(arr: number[], monotonic: "ascending" | "descending") {
-    const sorted: Number[] = [];
-
-    for (let i = 0; i < arr.length; i++) {
-      let indexMin = i;
-      for (let j = i + 1; j < arr.length; j++) {
-        setCurrentIdx([i, j]);
-        await delay(500);
-
-        if (monotonic === "ascending") {
-          if (arr[indexMin] > arr[j]) {
-            indexMin = j;
-          }
-        } else {
-          if (arr[indexMin] < arr[j]) {
-            indexMin = j;
-          }
-        }
-      }
-
-      sorted.push(i);
-      setSortedIdx(sorted);
-
-      if (indexMin !== i) {
-        [arr[i], arr[indexMin]] = [arr[indexMin], arr[i]];
-        setArr([...arr]);
-      }
-    }
-
-    setPending(false);
-    return arr;
-  }
-
-  async function bubbleSort(arr: number[], monotonic: "ascending" | "descending") {
-    const sorted: Number[] = [];
-
-    for (let i = 0; i <= arr.length - 1; i++) {
-      for (let j = 0; j < arr.length - i - 1; j++) {
-        setCurrentIdx([j, j + 1]);
-        await delay(500);
-
-        if (monotonic === "ascending") {
-          if (arr[j] > arr[j + 1]) {
-            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            setArr([...arr]);
-          }
-        } else {
-          if (arr[j] < arr[j + 1]) {
-            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            setArr([...arr]);
-          }
-        }
-      }
-
-      sorted.push(arr.length - i - 1);
-      setSortedIdx(sorted);
-    }
-
-    setPending(false);
-    return arr;
-  }
 
   useEffect(() => {
     handleGetArr();
