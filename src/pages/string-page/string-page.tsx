@@ -5,6 +5,7 @@ import { Input } from "../../components/ui/input/input";
 import { SolutionLayout } from "../../components/ui/solution-layout/solution-layout";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/funcs";
+import reverseStr from "./reverseStr";
 import styles from "./string-page.module.css";
 
 export const StringComponent: React.FC = () => {
@@ -21,29 +22,12 @@ export const StringComponent: React.FC = () => {
     setSortedIdx([]);
     setArr(value.split(""));
     setPending(true);
-    reverseStr(value);
+    reverseStr(value, setCurrentIdx, setSortedIdx, setArr, setPending, delay);
   };
 
   const onChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
     setValue(evt.target.value);
   };
-
-  async function reverseStr(str: string) {
-    const arr = str.split("");
-    const sorted: Number[] = [];
-
-    for (let i = 0; i < arr.length / 2; i++) {
-      setCurrentIdx([i, arr.length - 1 - i]);
-      [arr[i], arr[arr.length - 1 - i]] = [arr[arr.length - 1 - i], arr[i]];
-      await delay(1000);
-      sorted.push(i, arr.length - 1 - i);
-      setSortedIdx(sorted);
-      setArr([...arr]);
-    }
-
-    setPending(false);
-    return arr;
-  }
 
   return (
     <SolutionLayout title="Строка">
